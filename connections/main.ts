@@ -4,6 +4,7 @@ import {
   ParsedCaptureResponse,
 } from '@primer-io/app-framework';
 import StripeConnection from './Stripe';
+import helpers from './helpers';
 
 (async () => {
   console.log('\n=== TEST: authorization ===');
@@ -29,7 +30,8 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
         expiryYear: 2022,
         cardholderName: 'Mr Foo Bar',
         cvv: '020',
-        cardNumber: '4111111111111111',
+        // Use helpers.cardNumbers.invalid to make the authorization call fail.
+        cardNumber: helpers.cardNumber.valid,
       },
     });
   } catch (e) {
@@ -37,10 +39,6 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
     console.error(e);
     process.exit(1);
   }
-
-  console.log(
-    `Authorization request complete: "${response.transactionStatus}"`,
-  );
 
   if (response.transactionStatus === 'FAILED') {
     console.log(`Authorization Request failed: ${response.errorMessage}`);
@@ -51,6 +49,10 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
     console.log(`Authorization was declined: ${response.declineReason}`);
     process.exit(1);
   }
+
+  console.log(
+    `✓ Authorization request complete: "${response.transactionStatus}"`,
+  );
 
   return response;
 }
@@ -82,6 +84,10 @@ async function testCancelTransaction(): Promise<void> {
     console.error(
       `Expected transaction status to be "CANCELLED" but received "${response.transactionStatus}"`,
     );
+  } else {
+    console.log(
+      `✓ Cancellation request complete: "${response.transactionStatus}"`,
+    );
   }
 }
 
@@ -112,5 +118,7 @@ async function testCaptureTransaction(): Promise<void> {
     console.error(
       `Expected transaction status to be "SETTLED" but received "${response.transactionStatus}"`,
     );
+  } else {
+    console.log(`✓ Capture request complete: "${response.transactionStatus}"`);
   }
 }
