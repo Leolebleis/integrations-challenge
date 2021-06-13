@@ -6,12 +6,6 @@ export type TransactionStatus =
   | 'SETTLED'
   | 'CANCELLED';
 
-export interface StripeConfiguration {
-  version: string;
-  baseUrl: string;
-  contentType: string;
-}
-
 export type DeclineReason = 'DO_NOT_HONOR' | 'INSUFFICIENT_FUNDS' | 'UNKNOWN';
 
 export interface CardDetails {

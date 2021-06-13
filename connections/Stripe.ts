@@ -5,7 +5,6 @@ import {
   ParsedAuthorizationResponse,
   ParsedCancelResponse,
   ParsedCaptureResponse,
-  StripeConfiguration,
   ProcessorConnection,
   RawAuthorizationRequest,
   RawCancelRequest,
@@ -15,16 +14,6 @@ import {
 import helpers from './helpers';
 
 import HttpClient from '../common/HTTPClient';
-
-/**
- * Stripe API constants, containing the version used of the Stripe API,
- * the base URL, and the content-type used by its endpoints.
- */
-const StripeConfig: StripeConfiguration = {
-  version: 'v1',
-  baseUrl: 'https://api.stripe.com',
-  contentType: 'application/x-www-form-urlencoded',
-};
 
 const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   name: 'STRIPE',
@@ -48,7 +37,7 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   async authorize(
     request: RawAuthorizationRequest<APIKeyCredentials, CardDetails>,
   ): Promise<ParsedAuthorizationResponse> {
-    const url = `${StripeConfig.baseUrl}/${StripeConfig.version}/payment_intents`;
+    const url = `${helpers.stripeApi.baseUrl}/${helpers.stripeApi.version}/payment_intents`;
 
     // URLSearchParams will format the object like required for a request of type application/x-www-form-urlencoded.
     const formData: string = helpers.encodeObjectToFormUrlEncodedBody({
@@ -78,7 +67,7 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
       body: formData,
       headers: {
         'Authorization': `Bearer ${request.processorConfig.apiKey}`,
-        'Content-Type': StripeConfig.contentType,
+        'Content-Type': helpers.stripeApi.contentType,
       },
     })
       .then((response) => {
@@ -135,14 +124,14 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   async capture(
     request: RawCaptureRequest<APIKeyCredentials>,
   ): Promise<ParsedCaptureResponse> {
-    const url = `${StripeConfig.baseUrl}/${StripeConfig.version}/payment_intents/${request.processorTransactionId}/capture`;
+    const url = `${helpers.stripeApi.baseUrl}/${helpers.stripeApi.version}/payment_intents/${request.processorTransactionId}/capture`;
 
     return HttpClient.request(url, {
       method: 'post',
       body: '',
       headers: {
         'Authorization': `Bearer ${request.processorConfig.apiKey}`,
-        'Content-Type': StripeConfig.contentType,
+        'Content-Type': helpers.stripeApi.contentType,
       },
     })
       .then((response) => {
@@ -182,14 +171,14 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   async cancel(
     request: RawCancelRequest<APIKeyCredentials>,
   ): Promise<ParsedCancelResponse> {
-    const url = `${StripeConfig.baseUrl}/${StripeConfig.version}/payment_intents/${request.processorTransactionId}/cancel`;
+    const url = `${helpers.stripeApi.baseUrl}/${helpers.stripeApi.version}/payment_intents/${request.processorTransactionId}/cancel`;
 
     return HttpClient.request(url, {
       method: 'post',
       body: '',
       headers: {
         'Authorization': `Bearer ${request.processorConfig.apiKey}`,
-        'Content-Type': StripeConfig.contentType,
+        'Content-Type': helpers.stripeApi.contentType,
       },
     })
       .then((response) => {
