@@ -27,8 +27,9 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   },
 
   /**
-   * Method to capture authorise a payment intent.
-   * This method should authorise a card transaction.
+   * Method to authorise a payment intent.
+   * This method should authorise a card transaction and create a payment intent. If successful,
+   * the status should be updated to requires_capture.
    * NOTE: It will not capture the transaction.
    *
    * @param {RawAuthorizationRequest<APIKeyCredentials, CardDetails>} request - The request to Stripe for authorizing a transaction.
@@ -115,8 +116,9 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   },
 
   /**
-   * Method to capture a payment intent.
-   * This method should capture the funds on an authorized transaction.
+   * Method to capture a payment.
+   * This method should capture the funds on an authorized payment intent.
+   * If successful, the status will be updated to succeeded.
    *
    * @param {RawCaptureRequest<APIKeyCredentials>} request - the request to Stripe to capture a transaction.
    * @returns {Promise<ParsedCaptureResponse>} Returns the response with the appropriate transactionStatus.
@@ -163,9 +165,10 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
 
   /**
    * Method to cancel a payment intent.
-   * This method should cancel an authorized transaction.
+   * This method should cancel an authorized payment. If successful, the PaymentIntent should be
+   * updated to canceled.
    *
-   * @param {RawCancelRequest<APIKeyCredentials>} request - the request to Stripe to cancel a transaction.
+   * @param {RawCancelRequest<APIKeyCredentials>} request - the request to Stripe to cancel a PaymentIntent.
    * @returns {Promise<ParsedCancelResponse>} Returns the response with the appropriate transactionStatus.
    */
   async cancel(

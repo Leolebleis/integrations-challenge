@@ -54,7 +54,7 @@ curl --location --request POST 'https://api.stripe.com/v1/payment_intents' \
 
 #### Notes
 
-* The only two required parameters are `amount` and `currency`. However, since we already know the payment method will be a card and we know its details, we add it directly at the this step through the `payment_method_data` field. This will help us skip the `requires_payment_method` status detailed in the section above.
+* The only two required parameters are `amount` and `currency`. However, since we already know the payment method will be a card and we know its details, we add it directly at the this step through the `payment_method_data` field. This will help us skip the `requires_payment_method` status mentioned in the section above.
 
 * `confirm=true` will ensure the confirmation of the payment is performed directly at the PaymentIntent creation step, instead of requiring another, separate confirmation call. This will help us skip the `requires_confirmation` status.
 

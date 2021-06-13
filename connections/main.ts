@@ -35,18 +35,18 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
       },
     });
   } catch (e) {
-    console.error('Error while authorizing transaction:');
+    console.error('✗ Error while authorizing transaction:');
     console.error(e);
     process.exit(1);
   }
 
   if (response.transactionStatus === 'FAILED') {
-    console.log(`Authorization Request failed: ${response.errorMessage}`);
+    console.log(`✗ Authorization Request failed: ${response.errorMessage}`);
     process.exit(1);
   }
 
   if (response.transactionStatus === 'DECLINED') {
-    console.log(`Authorization was declined: ${response.declineReason}`);
+    console.log(`✗ Authorization was declined: ${response.declineReason}`);
     process.exit(1);
   }
 
@@ -63,7 +63,7 @@ async function testCancelTransaction(): Promise<void> {
   console.log('Cancelling authorized payment...');
 
   if (authResponse.transactionStatus !== 'AUTHORIZED') {
-    console.error('Transaction must be AUTHORIZED in order to cancel it');
+    console.error('✗ Transaction must be AUTHORIZED in order to cancel it');
     process.exit(1);
   }
 
@@ -75,14 +75,14 @@ async function testCancelTransaction(): Promise<void> {
       processorConfig: StripeConnection.configuration,
     });
   } catch (e) {
-    console.error('Error while cancelling transaction:');
+    console.error('✗ Error while cancelling transaction:');
     console.error(e);
     process.exit(1);
   }
 
   if (response.transactionStatus !== 'CANCELLED') {
     console.error(
-      `Expected transaction status to be "CANCELLED" but received "${response.transactionStatus}"`,
+      `✗ Expected transaction status to be "CANCELLED" but received "${response.transactionStatus}"`,
     );
   } else {
     console.log(
