@@ -4,8 +4,13 @@ const helpers = {
   cardNumber: {
     valid: '4111111111111111',
 
-    // This card number will make payment confirmation fail if a cvc number is provided.
-    invalid: '4000000000000101',
+    invalid: {
+      // This card number will make payment confirmation fail if a cvc number is provided.
+      incorrectCvc: '4000000000000101',
+
+      // This will return a card_declined code with insufficient_funds as a decline_code
+      insufficientFunds: '4000000000009995',
+    },
   },
 
   /**
@@ -18,9 +23,7 @@ const helpers = {
     contentType: 'application/x-www-form-urlencoded',
   },
 
-  encodeObjectToFormUrlEncodedBody(
-    parameters: NodeJS.Dict<string | ReadonlyArray<string>>,
-  ): string {
+  encodeObjectToFormUrlEncodedBody(parameters: NodeJS.Dict<string>): string {
     return new URLSearchParams(parameters).toString();
   },
 };
